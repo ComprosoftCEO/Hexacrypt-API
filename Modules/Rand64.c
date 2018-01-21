@@ -1,4 +1,4 @@
-#include <cRand64.h>
+#include <Rand64.h>
 
 
 //Define the private object structure

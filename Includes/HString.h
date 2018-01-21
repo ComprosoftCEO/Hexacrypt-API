@@ -20,7 +20,9 @@ typedef struct {
 
 
 //Auto filters the string
-pHString New_HString(const char* string, unsigned int rounds, unsigned int front_garbage, unsigned int back_garbage);
+//  maxlen = Maximum size of full buffer, INCLUDING null terminator!!!!!
+pHString New_HString(const char* string, size_t maxlen,
+                     unsigned int rounds, unsigned int front_garbage, unsigned int back_garbage);
 void Free_HString(pHString hstr);
 
 

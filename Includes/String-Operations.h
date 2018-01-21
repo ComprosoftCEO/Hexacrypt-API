@@ -1,8 +1,8 @@
-#ifndef C_STRING_OPERATIONS_HEADER
-#define C_STRING_OPERATIONS_HEADER
+#ifndef STRING_OPERATIONS_HEADER
+#define STRING_OPERATIONS_HEADER
 
 #include <HString.h>
-#include <cRand64.h>
+#include <Rand64.h>
 
 
 /** \brief Filter a string to only have Ascii characters (32 - 126)
@@ -47,7 +47,7 @@ void Reverse_String(char* string);
  * \param str The string to duplicate
  * \return Newly allocated string, needs to be freed.
  */
-char* strdup(const char* str);
+char* hex_strdup(const char* str);
 
 
 
@@ -82,4 +82,4 @@ void Remove_Garbage(pHString string, pRand64 rand,
 #define DEFAULT_BGARB_RANGE 4
 
 
-#endif // C_STRING_OPERATIONS_HEADER Included
+#endif // STRING_OPERATIONS_HEADER Included

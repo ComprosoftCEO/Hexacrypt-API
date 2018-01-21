@@ -1,5 +1,5 @@
-#ifndef C_STRING_MATRIX_HEADER
-#define C_STRING_MATRIX_HEADER
+#ifndef STRING_MATRIX_HEADER
+#define STRING_MATRIX_HEADER
 
 #include <stdint.h>
 
@@ -44,4 +44,4 @@ void StringMatrix_PseudoXOR_Cell(pStringMatrix matrix, pStringMatrix_Params para
 void StringMatrix_PseudoXOR_Row(pStringMatrix matrix, pStringMatrix_Params params);
 void StringMatrix_PseudoXOR_Col(pStringMatrix matrix, pStringMatrix_Params params);
 
-#endif // C_STRING_MATRIX_HEADER Included
+#endif // STRING_MATRIX_HEADER Included

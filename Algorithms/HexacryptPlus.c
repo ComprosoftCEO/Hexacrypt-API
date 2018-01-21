@@ -10,24 +10,22 @@
 //    V (expand)     \->Matrix Code <----/
 //
 //            (and so on...)
+#include <Hexacrypt-API.h>
 
-#include <Hexacrypt.h>
+#include <Hash8.h>
+#include <Rand64.h>
+#include <String-Operations.h>
+#include <MatrixCode.h>
+#include <KeyExpand.h>
 
-#include <cHash8.h>
-#include <cRand64.h>
-#include <cString-Operations.h>
-#include <cMatrixCode.h>
-#include <cKeyExpand.h>
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-char* HexacryptPlus_Encrypt(const char* plaintext, const char* key,
+DLL_EXPORT const char* HexacryptPlus_Encrypt(const char* plaintext, const char* key,
                             uint32_t rounds) {
 
-    pHString hs_plaintext = New_HString(plaintext,rounds,4,4);
+    pHString hs_plaintext = New_HString(plaintext,BUF_SIZE,rounds,4,4);
     pKeyExpand ke = New_KeyExpander(key);
     static pRand64 rand = NULL;
 
@@ -38,13 +36,11 @@ char* HexacryptPlus_Encrypt(const char* plaintext, const char* key,
         Rand64_Reseed(rand,Hash8_U64(ke->str));
         pseudoXOR(hs_plaintext->str,rand);
 
-
         Rand64_Reset(rand);
         Reverse_String(hs_plaintext->str);
         Add_Garbage(hs_plaintext,rand,
                     DEFAULT_FGARB_MIN, DEFAULT_FGARB_RANGE,
                     DEFAULT_BGARB_MIN, DEFAULT_BGARB_RANGE);
-
 
         MatrixCode(hs_plaintext->str,ke->str,DEFAULT_COMMANDS);
 
@@ -57,22 +53,23 @@ char* HexacryptPlus_Encrypt(const char* plaintext, const char* key,
 
 
     //Avoid memory leaks
-    char* ret = strdup(hs_plaintext->str);
+    strncpy(output_buffer,hs_plaintext->str,BUF_SIZE - 1);
     Free_HString(hs_plaintext);
     Free_KeyExpander(ke);
 
-    return ret;
+    return output_buffer;
 }
 
 
-char* HexacryptPlus_Decrypt(const char* ciphertext, const char* key, uint32_t rounds) {
+
+DLL_EXPORT const char* HexacryptPlus_Decrypt(const char* ciphertext, const char* key, uint32_t rounds) {
 
     //Go back and recalculate all former keys
     pKeyExpand ke = New_KeyExpander(key);
     char** all_keys = malloc(sizeof(char*) * (rounds+1));
     uint32_t i;
     for (i = 0; i <= rounds; ++i) {
-        all_keys[i] = strdup(ke->str);
+        all_keys[i] = hex_strdup(ke->str);
         ExpandKey(ke);
     }
 
@@ -80,7 +77,7 @@ char* HexacryptPlus_Decrypt(const char* ciphertext, const char* key, uint32_t ro
     if (!rand) {rand = New_Rand64_Seed(0);}
 
     //Add No extra garbage space to the string
-    pHString hs_ciphertext = New_HString(ciphertext,0,0,0);
+    pHString hs_ciphertext = New_HString(ciphertext,BUF_SIZE,0,0,0);
 
     Rand64_Reseed(rand,Hash8_U64(all_keys[rounds]));
     pseudoXOR(hs_ciphertext->str,rand);
@@ -103,7 +100,7 @@ char* HexacryptPlus_Decrypt(const char* ciphertext, const char* key, uint32_t ro
     }
 
     //Avoid memory leaks
-    char* ret = strdup(hs_ciphertext->str);
+    strncpy(output_buffer,hs_ciphertext->str,BUF_SIZE - 1);
     Free_HString(hs_ciphertext);
     Free_KeyExpander(ke);
 
@@ -111,5 +108,5 @@ char* HexacryptPlus_Decrypt(const char* ciphertext, const char* key, uint32_t ro
         free(all_keys[i]);
     } free(all_keys);
 
-    return ret;
+    return output_buffer;
 }

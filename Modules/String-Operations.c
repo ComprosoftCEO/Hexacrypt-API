@@ -1,5 +1,4 @@
-#include <cString-Operations.h>
-
+#include <String-Operations.h>
 #include <string.h>
 
 
@@ -18,7 +17,7 @@ void Filter_Ascii(char* string, size_t len) {
         //  the Null-terminator
         if (string[i] >= 32 && string[i] <= 126) {
             *temp_str = string[i];
-            temp_str++;
+            ++temp_str;
         }
     }
     *temp_str = 0;  //Null-terminator
@@ -112,8 +111,8 @@ void Reverse_String(char* string) {
 }
 
 
-char *strdup(const char *c) {
-    char *dup = malloc(strlen(c) + 1);
+char* hex_strdup(const char *c) {
+    char *dup = calloc(strlen(c) + 1,sizeof(char));
 
     if (dup != NULL) {
        strcpy(dup, c);
@@ -121,7 +120,6 @@ char *strdup(const char *c) {
 
     return dup;
 }
-
 
 
 //********************************************************
@@ -137,27 +135,38 @@ void Add_Garbage(pHString string, pRand64 rand,
     if (!garb_rand) {garb_rand = New_Rand64();}
 
     uint64_t front, back, i;
+    size_t len;
 
-    //Randomly pick the garbage
-    front = front_min_garb +
-            ((front_range_garb > 0) ? Rand64_Next(garb_rand) % front_range_garb : 0);
+    if (Rand64_Next(garb_rand) & 7) {
 
-    back =  back_min_garb +
-            ((back_range_garb > 0) ? Rand64_Next(garb_rand) % back_range_garb : 0);
+        //Randomly pick the garbage
+        front = front_min_garb +
+                ((front_range_garb > 0) ? Rand64_Next(garb_rand) % front_range_garb : 0);
 
+        back =  back_min_garb +
+                ((back_range_garb > 0) ? Rand64_Next(garb_rand) % back_range_garb : 0);
 
-    //HERE!!! It assumes there is enough space in buffer
-    //  Otherwise, all sorts of BAD may happen
-    string->str -=front;
-    for (i = 0; i < front; ++i) {
-        string->str[i] = allChars[Rand64_Next(garb_rand) % allChars_length];
+        //HERE!!! It assumes there is enough space in buffer
+        //  Otherwise, all sorts of BAD may happen
+        string->str -=front;
+        for (i = 0; i < front; ++i) {
+            string->str[i] = allChars[Rand64_Next(garb_rand) % allChars_length];
+        }
+
+        len = strlen(string->str);
+        for (i = 0; i < back; ++i) {
+            string->str[len + i] = allChars[Rand64_Next(garb_rand) % allChars_length];
+        }
+
+    } else {
+
+        //Randomly put "corrupted" garbage as part of the algorithm
+        //  This works because decryption does not remove garbage if it is
+        //  outside the specified range
+        front = front_min_garb + front_range_garb + 1;
+        back  = back_min_garb + back_range_garb + 1;
+        len = strlen(string->str) - back;
     }
-
-    size_t len = strlen(string->str);
-    for (i = 0; i < back; ++i) {
-        string->str[len + i] = allChars[Rand64_Next(garb_rand) % allChars_length];
-    }
-
 
     //Encode the garbage by appending onto back of key
     strcpy(key,allChars);
@@ -166,6 +175,7 @@ void Add_Garbage(pHString string, pRand64 rand,
     len += back;
     string->str[len] = key[front];
     string->str[len+1] = key[back];
+    string->str[len+2] = 0;             //Always add the Null-Terminator
 }
 
 
@@ -182,6 +192,10 @@ void Remove_Garbage(pHString string, pRand64 rand,
     uint64_t front, back;
     size_t len = strlen(string->str);
 
+    if (len < 2) {
+        return;   /*This string has no garbage*/
+    }
+
     front = strchr(key,string->str[len-2]) - key;
     back  = strchr(key,string->str[len-1]) - key;
 
@@ -191,8 +205,8 @@ void Remove_Garbage(pHString string, pRand64 rand,
         front > (front_min_garb + front_range_garb) ||
         back > (back_min_garb + back_range_garb) ||
         (front+back) > len) {
-
             //TODO: Throw an error code??
+            string->str[len - 2] = 0;       //Remove the two counters anyway
             return;
         }
 
@@ -200,5 +214,3 @@ void Remove_Garbage(pHString string, pRand64 rand,
     string->str[(len - 2)- back] = 0;
     string->str+=front;
 }
-
-

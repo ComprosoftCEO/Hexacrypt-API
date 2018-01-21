@@ -1,6 +1,6 @@
-#include <cStringMatrix.h>
-#include <cString-Operations.h>
-#include <cRand64.h>
+#include <StringMatrix.h>
+#include <String-Operations.h>
+#include <Rand64.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -1,8 +1,8 @@
-#ifndef C_KEY_EXPAND_HEADER
-#define C_KEY_EXPAND_HEADER
+#ifndef KEY_EXPAND_HEADER
+#define KEY_EXPAND_HEADER
 
-#include <cHexStream.h>
-#include <cRand64.h>
+#include <HexStream.h>
+#include <Rand64.h>
 
 typedef struct {
     char* str;            // Buffer that holds the key
@@ -17,4 +17,4 @@ void Free_KeyExpander(pKeyExpand ke);
 void ExpandKey(pKeyExpand ke);
 
 
-#endif // C_KEY_EXPAND_HEADER included
+#endif // KEY_EXPAND_HEADER included

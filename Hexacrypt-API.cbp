@@ -13,15 +13,19 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/Hexacrypt-API" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/Hexacrypt-API" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="3" />
 				<Option compiler="gcc" />
+				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DRELEASE" />
+					<Add option="-DBUILD_DLL" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -34,43 +38,47 @@
 			<Add option="-std=c99" />
 			<Add directory="Includes" />
 		</Compiler>
-		<Unit filename="HString.c">
+		<Unit filename="Algorithms/Hexacrypt.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Hash8.c">
+		<Unit filename="Algorithms/HexacryptPlus.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="HexStream.c">
+		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Hexacrypt.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="Includes/Dll.h" />
 		<Unit filename="Includes/HString.h" />
-		<Unit filename="Includes/Hexacrypt.h" />
-		<Unit filename="Includes/cHash8.h" />
-		<Unit filename="Includes/cHexStream.h" />
-		<Unit filename="Includes/cKeyExpand.h" />
-		<Unit filename="Includes/cMatrixCode.h" />
-		<Unit filename="Includes/cRand64.h" />
-		<Unit filename="Includes/cString-Operations.h" />
-		<Unit filename="Includes/cStringMatrix.h" />
-		<Unit filename="KeyExpand.c">
+		<Unit filename="Includes/Hash8.h" />
+		<Unit filename="Includes/HexStream.h" />
+		<Unit filename="Includes/Hexacrypt-API.h" />
+		<Unit filename="Includes/KeyExpand.h" />
+		<Unit filename="Includes/MatrixCode.h" />
+		<Unit filename="Includes/Rand64.h" />
+		<Unit filename="Includes/String-Operations.h" />
+		<Unit filename="Includes/StringMatrix.h" />
+		<Unit filename="Modules/HString.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="MatrixCode.c">
+		<Unit filename="Modules/Hash8.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Rand64.c">
+		<Unit filename="Modules/HexStream.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="String-Operations.c">
+		<Unit filename="Modules/KeyExpand.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="StringMatrix.c">
+		<Unit filename="Modules/MatrixCode.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="main.c">
+		<Unit filename="Modules/Rand64.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Modules/String-Operations.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Modules/StringMatrix.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

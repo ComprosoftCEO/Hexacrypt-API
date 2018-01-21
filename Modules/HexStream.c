@@ -1,10 +1,9 @@
-#include <cHexStream.h>
+#include <HexStream.h>
 
-#include <cString-Operations.h>
-#include <cRand64.h>
-#include <cHash8.h>
+#include <String-Operations.h>
+#include <Rand64.h>
+#include <Hash8.h>
 #include <string.h>
-#include <stdio.h>
 
 //Private HexStream object type
 typedef struct {

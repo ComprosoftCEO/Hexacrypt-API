@@ -1,8 +1,7 @@
-#include <cMatrixCode.h>
+#include <MatrixCode.h>
 
-#include <stdio.h>
-#include <cStringMatrix.h>
-#include <cHexStream.h>
+#include <StringMatrix.h>
+#include <HexStream.h>
 
 //Used to aid inverse function
 typedef struct {

@@ -1,5 +1,5 @@
-#ifndef C_RAND64_HEADER
-#define C_RAND64_HEADER
+#ifndef RAND64_HEADER
+#define RAND64_HEADER
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -26,4 +26,4 @@ void Rand64_Reset(pRand64 rand);
 
 uint64_t Rand64_Next(pRand64 rand);
 
-#endif // C_RAND64_HEADER Included
+#endif // RAND64_HEADER Included

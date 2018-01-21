@@ -1,5 +1,5 @@
-#ifndef C_HASH_8_HEADER
-#define C_HASH_8_HEADER
+#ifndef HASH_8_HEADER
+#define HASH_8_HEADER
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -18,4 +18,4 @@ HASH8_LENGTH_FUNCTION(U32,uint32_t);
 HASH8_LENGTH_FUNCTION(U64,uint64_t);
 
 
-#endif // C_HASH_8_HEADER Included
+#endif // HASH_8_HEADER Included

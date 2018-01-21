@@ -1,4 +1,4 @@
-#include <cHash8.h>
+#include <Hash8.h>
 #include <string.h>
 
 // 0-255 shuffled in any (random) order suffices

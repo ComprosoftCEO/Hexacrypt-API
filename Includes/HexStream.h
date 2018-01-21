@@ -1,5 +1,5 @@
-#ifndef C_HEX_STREAM_HEADER
-#define C_HEX_STREAM_HEADER
+#ifndef HEX_STREAM_HEADER
+#define HEX_STREAM_HEADER
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -21,4 +21,4 @@ uint32_t HexStream_GetInt(pHexStream stream);
 uint64_t HexStream_GetLong(pHexStream stream);
 
 
-#endif // C_HEX_STREAM_HEADER included
+#endif // HEX_STREAM_HEADER included

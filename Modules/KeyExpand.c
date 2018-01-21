@@ -1,9 +1,8 @@
-#include <cKeyExpand.h>
-#include <cHash8.h>
-#include <cString-Operations.h>
-#include <Stdlib.h>
+#include <KeyExpand.h>
+#include <Hash8.h>
+#include <String-Operations.h>
+#include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 pKeyExpand New_KeyExpander(const char* str) {
 
