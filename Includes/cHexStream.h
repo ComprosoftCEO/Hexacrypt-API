@@ -12,9 +12,10 @@ pHexStream New_HexStream(const char* seed, uint32_t state);
 void Free_HexStream(pHexStream stream);
 
 void HexStream_Reset(pHexStream stream);
+void HexStream_Reseed(pHexStream stream, const char* seed);
 
 char HexStream_Next(pHexStream stream);
-char* HexStream_NextString(pHexStream stream, size_t count);
+void HexStream_NextString(pHexStream stream, char* buf, size_t count);
 
 uint32_t HexStream_GetInt(pHexStream stream);
 uint64_t HexStream_GetLong(pHexStream stream);

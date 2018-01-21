@@ -19,6 +19,8 @@ typedef struct MC_PARAMS {
 pStringMatrix New_StringMatrix(char* string);
 void Free_StringMatrix(pStringMatrix matrix);
 
+void StringMatrix_SetString(pStringMatrix matrix, char* string);
+
 void StringMatrix_Print(pStringMatrix matrix);
 
 void StringMatrix_CellSwap(pStringMatrix matrix, pStringMatrix_Params params);

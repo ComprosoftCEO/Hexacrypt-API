@@ -86,7 +86,7 @@ void Rand64_Reset(pRand64 rand) {
 uint64_t Rand64_Next(pRand64 rand) {
 	pRand64_Obj r64 = (pRand64_Obj) rand;
 
-	uint64_t index = (r64->index+1) & R64_MASK;
+	uint64_t index = r64->index=(r64->index+1) & R64_MASK;
 	r64->arr[index] += (r64->arr[(index + 5) & R64_MASK] + r64->arr[(index + 17) & R64_MASK]);
 	return r64->arr[index];
 }

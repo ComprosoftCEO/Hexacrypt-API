@@ -27,31 +27,13 @@ pHexStream New_HexStream(const char* seed, uint32_t state) {
 
     hs->size = state;
 
-    // Buffer has pace for 2x the buffer plus null terminator
+    // Buffer has pace for 2x the buffer
     //   Allocate the initial state with one calloc as well...
-    hs->state_buf = calloc(state*3 + 2, sizeof(char));
-    hs->init_state = hs->state_buf + ((state*2 + 1) * sizeof(char));
-    hs->state = hs->state_buf;
-    hs->index = 0;
+    hs->state_buf = malloc(state*3 * sizeof(char));
+    hs->init_state = hs->state_buf + (state*2);
+    hs->char_rand = New_Rand64_Seed(0);
 
-    hs->char_rand = New_Rand64_Seed(Hash8_U64(seed,strlen(seed)));
-
-    //Fill the state
-    size_t i, len = strlen(seed);
-    for (i = 0; (i < state) && (i < len); ++i) {
-        hs->state_buf[i] = seed[i];
-        hs->init_state[i] = seed[i];
-    }
-
-    //Fill in remaining spaces with random characters
-    for (; (i < state); ++i) {
-        hs->state_buf[i] = allChars[Rand64_Next(hs->char_rand) % allChars_length];
-        hs->init_state[i] = hs->state_buf[i];
-    }
-
-
-    //Do one call to avoid fenangling
-    HexStream_Next((pHexStream) hs);
+    HexStream_Reseed((pHexStream) hs, seed);
 
     return (pHexStream) hs;
 }
@@ -59,7 +41,7 @@ pHexStream New_HexStream(const char* seed, uint32_t state) {
 
 
 void Free_HexStream(pHexStream stream) {
-    pHexStream_Obj hs = (pHexStream_Obj) hs;
+    pHexStream_Obj hs = (pHexStream_Obj) stream;
 
     free(hs->state_buf);
     Free_Rand64(hs->char_rand);
@@ -78,8 +60,34 @@ void HexStream_Reset(pHexStream stream) {
     hs->state = hs->state_buf;
     hs->index = 0;
 
-
     Rand64_Reset(hs->char_rand);
+}
+
+
+void HexStream_Reseed(pHexStream stream, const char* seed) {
+
+    pHexStream_Obj hs = (pHexStream_Obj) stream;
+
+    //Reset the buffers and PRNG
+    hs->state = hs->state_buf;
+    hs->index = 0;
+    Rand64_Reseed(hs->char_rand,Hash8_U64(seed));
+
+    //Fill the state
+    size_t i, len = strlen(seed);
+    for (i = 0; (i < hs->size) && (i < len); ++i) {
+        hs->state_buf[i] = seed[i];
+        hs->init_state[i] = seed[i];
+    }
+
+    //Fill in remaining spaces with random characters
+    for (; (i < hs->size); ++i) {
+        hs->state_buf[i] = allChars[Rand64_Next(hs->char_rand) % allChars_length];
+        hs->init_state[i] = hs->state_buf[i];
+    }
+
+    //Do one call to avoid finagling
+    HexStream_Next((pHexStream) hs);
 }
 
 
@@ -93,15 +101,16 @@ char HexStream_Next(pHexStream stream) {
 
     //pseudoXOR the state using the state as the key
     //  Then get the first character
-    Rand64_Reseed(pxor_rand,Hash8_U64(hs->state,hs->size));
-    //pseudoXOR(hs->state,pxor_rand);
+    Rand64_Reseed(pxor_rand,Hash8_U64_Length(hs->state,hs->size));
+    pseudoXOR_Length(hs->state,hs->size,pxor_rand);
     ret = hs->state[0];
 
     //Shift every character down by 1 and add a "Random" char
     //  onto the end
 
     // To speed up this process, simply move the pointer
-    if (++hs->index >= hs->size) {
+    if (++hs->index > hs->size) {
+        memcpy(hs->state_buf,hs->state+1,hs->size);
         hs->state = hs->state_buf;
         hs->index = 0;
     } else {
@@ -109,30 +118,17 @@ char HexStream_Next(pHexStream stream) {
     }
 
     char random_char = allChars[Rand64_Next(hs->char_rand) % allChars_length];
-
     hs->state[hs->size - 1] = random_char;
-    if (hs->index != 0) {hs->state_buf[hs->index-1] = random_char;}
-    hs->state[hs->size] = 0;    //Null terminator
-
-    printf("%d: ",hs->size);
-    for (int i = 0; i < (hs->size*3 + 2); ++i) {
-        printf("%c",hs->state[i]);
-        if ((i % 10) == 0 && i!=0) {printf(" ");}
-    } printf("\n");
 
     return ret;
 }
 
 
-
-char* HexStream_NextString(pHexStream stream, size_t count) {
+void HexStream_NextString(pHexStream stream, char* buf, size_t count) {
     //Add null terminator
-    char* buf = calloc(count+1,sizeof(char));
     for (size_t i = 0; i < count; ++i) {
         buf[i] = HexStream_Next(stream);
     }
-
-    return buf;
 }
 
 

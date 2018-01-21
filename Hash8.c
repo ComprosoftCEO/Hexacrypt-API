@@ -1,4 +1,5 @@
 #include <cHash8.h>
+#include <string.h>
 
 // 0-255 shuffled in any (random) order suffices
 static const uint8_t hashTable[256] = {
@@ -21,8 +22,8 @@ static const uint8_t hashTable[256] = {
 };
 
 //Use preprocessor like a template
-#define HASH8_TEMPLATE(name,type) \
-type Hash8_##name(const char* str, size_t len) { \
+#define HASH8_LENGTH_TEMPLATE(name,type) \
+type Hash8_##name##_Length(const char* str, size_t len) { \
     \
 	type retVal = 0; \
 	uint8_t hashChar; \
@@ -40,6 +41,24 @@ type Hash8_##name(const char* str, size_t len) { \
     return retVal;\
 }
 
+#define HASH8_TEMPLATE(name,type) \
+type Hash8_##name(const char* str) { \
+ \
+	type retVal = 0; \
+	uint8_t hashChar; \
+	size_t i, j, len=strlen(str); \
+    \
+	for (i = 0; i < sizeof(type); ++i) {\
+        hashChar = hashTable[(str[0] + i) % 256];\
+        for (j = 0; j < len; ++j) {\
+            hashChar = hashTable[hashChar ^ str[j]];\
+        }\
+        retVal <<= 8;\
+        retVal |= hashChar;\
+    }\
+    \
+    return retVal;\
+}
 
 
 //Hash a string using a simple hash function
@@ -48,3 +67,8 @@ HASH8_TEMPLATE(U8,uint8_t)
 HASH8_TEMPLATE(U16,uint16_t)
 HASH8_TEMPLATE(U32,uint32_t)
 HASH8_TEMPLATE(U64,uint64_t)
+
+HASH8_LENGTH_TEMPLATE(U8,uint8_t)
+HASH8_LENGTH_TEMPLATE(U16,uint16_t)
+HASH8_LENGTH_TEMPLATE(U32,uint32_t)
+HASH8_LENGTH_TEMPLATE(U64,uint64_t)

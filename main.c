@@ -2,25 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <cHexStream.h>
-#include <cMatrixCode.h>
+#include <Hexacrypt.h>
 
 int main(int argc, char** argv) {
 
-    if (argc < 2) {return 1;}
-    char* buf = malloc((strlen(argv[1])+1) * sizeof(char));
+    if (argc < 3) {return 1;}
 
-    pHexStream stream = New_HexStream(argv[1],10);
-    while(1) {
-        HexStream_Next(stream);
+    for (int i = 0; i < 32; ++i) {
+        char* encoded = HexacryptPlus_Encrypt(argv[1], argv[2], 10);
+        printf("\n********%s\n",encoded); fflush(stdout);
+
+        char* decoded = HexacryptPlus_Decrypt(encoded,argv[2], 10);
+        printf("\n********%s\n",decoded); fflush(stdout);
+
+        free(encoded);
+        free(decoded);
     }
-
-    strcpy(buf,argv[1]);
-    printf("%d\n",strlen(buf));
-
-    //MatrixCode(buf,"Secret Key",DEFAULT_COMMANDS);
-    //printf("%s\n",buf);
-    //MatrixCode_Inverse(buf,"Secret Key",DEFAULT_COMMANDS);
-    //printf("%s\n",buf);
-
 }

@@ -1,4 +1,5 @@
 #include <cString-Operations.h>
+
 #include <string.h>
 
 
@@ -44,6 +45,39 @@ void pseudoXOR(char* string, pRand64 rand) {
 }
 
 
+void pseudoXOR_Length(char* string, size_t length, pRand64 rand) {
+
+    static char xor_string[sizeof(ALL_CHARS_LITERAL)];
+    size_t index;
+
+    //Always recopy the string of all characters
+    strcpy(xor_string,allChars);
+
+    for (size_t i = 0; i < length; ++i) {
+        Shuffle_String(rand,xor_string,allChars_length);
+
+        //TODO:   This should never fail, but maybe add check????
+        index = strchr(xor_string,string[i]) - xor_string;
+        string[i] = xor_string[(allChars_length - 1) - index];
+    }
+}
+
+void pseudoXOR_NChar(char* string, size_t incrament, size_t count, pRand64 rand) {
+    static char xor_string[sizeof(ALL_CHARS_LITERAL)];
+    size_t index;
+
+    //Always recopy the string of all characters
+    strcpy(xor_string,allChars);
+
+    count*=incrament;
+    for (size_t i = 0; i < count; i+=incrament) {
+        Shuffle_String(rand,xor_string,allChars_length);
+
+        //TODO:   This should never fail, but maybe add check????
+        index = strchr(xor_string,string[i]) - xor_string;
+        string[i] = xor_string[(allChars_length - 1) - index];
+    }
+}
 
 //  Length is passed in as a parameter b/c the main string being shuffled
 //   is the allChars string, which always has the same length, so why bother
@@ -78,6 +112,16 @@ void Reverse_String(char* string) {
 }
 
 
+char *strdup(const char *c) {
+    char *dup = malloc(strlen(c) + 1);
+
+    if (dup != NULL) {
+       strcpy(dup, c);
+    }
+
+    return dup;
+}
+
 
 
 //********************************************************
@@ -90,7 +134,7 @@ void Add_Garbage(pHString string, pRand64 rand,
     //Use a static random object for various things
     static char key[sizeof(ALL_CHARS_LITERAL)];
     static pRand64 garb_rand = NULL;
-    if (!garb_rand) {garb_rand = New_Rand64_Seed(0);}
+    if (!garb_rand) {garb_rand = New_Rand64();}
 
     uint64_t front, back, i;
 

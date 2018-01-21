@@ -18,7 +18,9 @@ typedef struct {
     char* str;      // The actual string being worked on
 } HString, *pHString;
 
-pHString New_HString(const char* string, unsigned int rounds, unsigned int garbage);
+
+//Auto filters the string
+pHString New_HString(const char* string, unsigned int rounds, unsigned int front_garbage, unsigned int back_garbage);
 void Free_HString(pHString hstr);
 
 

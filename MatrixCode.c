@@ -10,9 +10,6 @@ typedef struct {
     unsigned char command;
 } MatrixCode_Command;
 
-static StringMatrix_Params params;
-
-
 typedef void (*MatrixCode_Function)(pStringMatrix,pStringMatrix_Params);
 
 static const int FUNCTION_COUNT = 15;
@@ -41,45 +38,48 @@ static const unsigned int paramsNeeded[] = {
 void MatrixCode(char* string, const char* key, uint32_t commands) {
 
     uint32_t i,j;
-    pStringMatrix matrix = New_StringMatrix(string);
-    pHexStream hstream = New_HexStream(key,DEFAULT_STATE);
+    static pHexStream hstream = NULL;
+    static pStringMatrix matrix = NULL;
+    static StringMatrix_Params params;
     params.doInverse = DO_NORMAL;
+
+    if (!hstream) {hstream =  New_HexStream(key,DEFAULT_STATE);}
+    else          {HexStream_Reseed(hstream,key);}
+
+    if (!matrix) {matrix = New_StringMatrix(string);}
+    else         {StringMatrix_SetString(matrix,string);}
 
     for (i = 0; i < commands; ++i) {
 
         unsigned char command = (HexStream_Next(hstream) % (FUNCTION_COUNT + 1));
-        //printf("%d\n",command);
-        //fflush(stdout);
 
-        //printf("%d: ",command);
         if (command) {
             --command;
 
             for (j = 0; j < paramsNeeded[command]; ++j) {
                 params.param[j] = HexStream_GetLong(hstream);
-                //printf("%lu,",params.param[j]);
-            } //printf("\n");
+            }
 
             MatrixCode_Functions[command](matrix,&params);
+            //printf("%2hhd %s\n",command+1,string);
         }
-
-        printf("%d\t%s\n",command+1,string);
     }
-
-   //Free_HexStream(hstream);
-   //Free_StringMatrix(matrix);
 }
 
 
 
 void MatrixCode_Inverse(char* string, const char* key, uint32_t commands) {
 
-    pHexStream hstream = New_HexStream(key,DEFAULT_STATE);
-    pStringMatrix matrix = New_StringMatrix(string);
+    static pHexStream hstream = NULL;
+    static pStringMatrix matrix = NULL;
     MatrixCode_Command *com, *allCommands = malloc(commands*sizeof(MatrixCode_Command));
     uint32_t i,j;
 
+    if (!hstream) {hstream = New_HexStream(key,DEFAULT_STATE);}
+    else          {HexStream_Reseed(hstream,key);}
 
+    if (!matrix) {matrix = New_StringMatrix(string);}
+    else         {StringMatrix_SetString(matrix,string);}
 
     //Step 1: Get All Commands
     for (i = 0; i < commands; ++i) {
@@ -97,13 +97,12 @@ void MatrixCode_Inverse(char* string, const char* key, uint32_t commands) {
     //Step 2: Run Through All Commands in Reverse
     for (i = commands; i > 0; --i) {
         com = allCommands + (i - 1);
-        printf("%d\t%s\n",com->command,string);
+        //printf("%2hhd %s\n",com->command,string);
         if (com->command) {
             MatrixCode_Functions[com->command - 1](matrix,&com->params);
         }
     }
 
-    //Free_HexStream(hstream);
-    Free_StringMatrix(matrix);
+    //No Resource Leaks...
     free(allCommands);
 }
