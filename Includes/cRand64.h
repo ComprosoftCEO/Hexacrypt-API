@@ -24,6 +24,6 @@ void Rand64_RandomSeed(pRand64 rand);
 uint64_t Rand64_GetSeed(pRand64 rand);
 void Rand64_Reset(pRand64 rand);
 
-uint64_t Rand64_NextInt(pRand64 rand);
+uint64_t Rand64_Next(pRand64 rand);
 
 #endif // C_RAND64_HEADER Included

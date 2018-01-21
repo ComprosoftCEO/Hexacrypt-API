@@ -1,20 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <cRand64.h>
 #include <string.h>
 
-int main()
-{
-    char str[1024];
-        strcpy(str,"Hello World How are you doing i am doing great wow!!!");
+#include <cHexStream.h>
+#include <cMatrixCode.h>
 
-    printf("Hello world!\n");
+int main(int argc, char** argv) {
 
-    pRand64 rand = New_Rand64_Seed(5);
+    if (argc < 2) {return 1;}
+    char* buf = malloc((strlen(argv[1])+1) * sizeof(char));
 
-    while (1) {
-        //Shuffle_String(rand,str,strlen(str));
-        printf("%s\n",str);
+    pHexStream stream = New_HexStream(argv[1],10);
+    while(1) {
+        HexStream_Next(stream);
     }
+
+    strcpy(buf,argv[1]);
+    printf("%d\n",strlen(buf));
+
+    //MatrixCode(buf,"Secret Key",DEFAULT_COMMANDS);
+    //printf("%s\n",buf);
+    //MatrixCode_Inverse(buf,"Secret Key",DEFAULT_COMMANDS);
+    //printf("%s\n",buf);
+
 }

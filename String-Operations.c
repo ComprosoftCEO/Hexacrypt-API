@@ -2,8 +2,10 @@
 #include <string.h>
 
 
-const char* allChars = " !\"#$\%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-const size_t allChars_length = sizeof(allChars) - 1;
+#define ALL_CHARS_LITERAL " !\"#$\%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+
+const char* allChars = ALL_CHARS_LITERAL;
+const size_t allChars_length = sizeof(ALL_CHARS_LITERAL) - 1;
 
 
 void Filter_Ascii(char* string, size_t len) {
@@ -25,7 +27,7 @@ void Filter_Ascii(char* string, size_t len) {
 //String needs to be pre-filtered or else it will fail
 void pseudoXOR(char* string, pRand64 rand) {
 
-    static char xor_string[sizeof(allChars)];
+    static char xor_string[sizeof(ALL_CHARS_LITERAL)];
     size_t index;
 
     //Always recopy the string of all characters
@@ -43,7 +45,6 @@ void pseudoXOR(char* string, pRand64 rand) {
 
 
 
-
 //  Length is passed in as a parameter b/c the main string being shuffled
 //   is the allChars string, which always has the same length, so why bother
 //   to always need to recalculate it. Yeah, it breaks encapsulation. I know...
@@ -55,7 +56,7 @@ void Shuffle_String(pRand64 rand, char* string, size_t len) {
 	for (size_t i = 0; i < len; ++i) {
 
 		//Do some fancy pointer maths to make this swapping very quick
-		uint64_t index = Rand64_NextInt(rand) % (len - i);
+		uint64_t index = Rand64_Next(rand) % (len - i);
 
 		temp = *string;
 		*string = string[index];
@@ -82,8 +83,78 @@ void Reverse_String(char* string) {
 //********************************************************
 //This assumes that margins are pre-allocated
 //********************************************************
+void Add_Garbage(pHString string, pRand64 rand,
+                 unsigned int front_min_garb, unsigned int front_range_garb,
+                 unsigned int back_min_garb,  unsigned int back_range_garb) {
 
-void Add_Garbage(char* string,pRand64 rand) {
+    //Use a static random object for various things
+    static char key[sizeof(ALL_CHARS_LITERAL)];
+    static pRand64 garb_rand = NULL;
+    if (!garb_rand) {garb_rand = New_Rand64_Seed(0);}
+
+    uint64_t front, back, i;
+
+    //Randomly pick the garbage
+    front = front_min_garb +
+            ((front_range_garb > 0) ? Rand64_Next(garb_rand) % front_range_garb : 0);
+
+    back =  back_min_garb +
+            ((back_range_garb > 0) ? Rand64_Next(garb_rand) % back_range_garb : 0);
 
 
+    //HERE!!! It assumes there is enough space in buffer
+    //  Otherwise, all sorts of BAD may happen
+    string->str -=front;
+    for (i = 0; i < front; ++i) {
+        string->str[i] = allChars[Rand64_Next(garb_rand) % allChars_length];
+    }
+
+    size_t len = strlen(string->str);
+    for (i = 0; i < back; ++i) {
+        string->str[len + i] = allChars[Rand64_Next(garb_rand) % allChars_length];
+    }
+
+
+    //Encode the garbage by appending onto back of key
+    strcpy(key,allChars);
+    Shuffle_String(rand,key,allChars_length);
+
+    len += back;
+    string->str[len] = key[front];
+    string->str[len+1] = key[back];
 }
+
+
+
+void Remove_Garbage(pHString string, pRand64 rand,
+                unsigned int front_min_garb, unsigned int front_range_garb,
+                unsigned int back_min_garb,  unsigned int back_range_garb) {
+
+    static char key[sizeof(ALL_CHARS_LITERAL)];
+    strcpy(key,allChars);
+
+    Shuffle_String(rand,key,allChars_length);
+
+    uint64_t front, back;
+    size_t len = strlen(string->str);
+
+    front = strchr(key,string->str[len-2]) - key;
+    back  = strchr(key,string->str[len-1]) - key;
+
+    //Make sure the garbage is in range to confuse decryption
+    //  It *should* still decrypt to complete garbage
+    if (front < front_min_garb || back < back_min_garb ||
+        front > (front_min_garb + front_range_garb) ||
+        back > (back_min_garb + back_range_garb) ||
+        (front+back) > len) {
+
+            //TODO: Throw an error code??
+            return;
+        }
+
+    //Be sure to remove encoded garbage as well..
+    string->str[(len - 2)- back] = 0;
+    string->str+=front;
+}
+
+

@@ -15,11 +15,10 @@
 #include <stdlib.h>
 
 typedef struct {
-    char* string;   // The actual string being worked on
-    char* buf;      // Address of the allocated buffer
+    char* str;      // The actual string being worked on
 } HString, *pHString;
 
-pHString New_HString(int rounds, int garbage, size_t string);
+pHString New_HString(const char* string, unsigned int rounds, unsigned int garbage);
 void Free_HString(pHString hstr);
 
 

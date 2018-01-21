@@ -59,7 +59,7 @@ void Rand64_RandomSeed(pRand64 rand) {
 	static pRand64 rand_seeder = NULL;
 	if (!rand_seeder) {rand_seeder = New_Rand64_Seed(time(NULL));}
 
-	Rand64_Reseed(rand,Rand64_NextInt(rand_seeder));
+	Rand64_Reseed(rand,Rand64_Next(rand_seeder));
 }
 
 
@@ -83,13 +83,10 @@ void Rand64_Reset(pRand64 rand) {
 
 
 
-uint64_t Rand64_NextInt(pRand64 rand) {
+uint64_t Rand64_Next(pRand64 rand) {
 	pRand64_Obj r64 = (pRand64_Obj) rand;
 
 	uint64_t index = (r64->index+1) & R64_MASK;
 	r64->arr[index] += (r64->arr[(index + 5) & R64_MASK] + r64->arr[(index + 17) & R64_MASK]);
 	return r64->arr[index];
 }
-
-
-

@@ -30,18 +30,35 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c99" />
 			<Add directory="Includes" />
 		</Compiler>
 		<Unit filename="HString.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hash8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="HexStream.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Includes/HString.h" />
+		<Unit filename="Includes/cHash8.h" />
+		<Unit filename="Includes/cHexStream.h" />
+		<Unit filename="Includes/cMatrixCode.h" />
 		<Unit filename="Includes/cRand64.h" />
 		<Unit filename="Includes/cString-Operations.h" />
+		<Unit filename="Includes/cStringMatrix.h" />
+		<Unit filename="MatrixCode.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Rand64.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="String-Operations.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="StringMatrix.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
