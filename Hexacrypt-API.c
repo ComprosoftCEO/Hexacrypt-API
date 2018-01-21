@@ -23,24 +23,16 @@ char output_buffer[BUF_SIZE];
 
 //Compile a main if this is a debug program
 #ifdef DEBUG
+    #include "Hexacrypt-Tester.c"
 
-#include <stdio.h>
-#include <stdlib.h>
-int main(int argc, char** argv) {
+    /*#include <stdio.h>
+    int main(int argc, char** argv) {
 
-    if (argc < 3) {return 1;}
+        const char* enc = Hexacrypt_Encrypt("Hello","Key");
+        printf("%s\n",enc);
+        const char* dec = Hexacrypt_Decrypt(enc,"Key");
+        printf("%s\n",dec);
 
-    for (int i = 0; i < 32; ++i) {
-        char* encoded = Hexacrypt_Encrypt(argv[1], argv[2]);
-        printf("\n********%s\n",encoded); fflush(stdout);
-
-        char* decoded = Hexacrypt_Decrypt(encoded,argv[2]);
-        printf("\n********%s\n",decoded); fflush(stdout);
-
-        //free(encoded);
-        //free(decoded);
     }
-}
-
-
+    */
 #endif // DEBUG

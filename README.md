@@ -18,7 +18,8 @@ Hexacrypt-API defines 2 versions when compiling:
 * **Debug** - Compile an executible to test the code (located in bin/Debug)
 * **Release** - Compile the .dll or .so file (located in bin/Release)
 
-The main function is defined in Hexacrypt-API.c, and helps to debug the code without having to use an external program to test the .dll or .so file.
+The main function is defined in Hexacrypt-API.c, and helps to debug the code without having to use an external program to test the .dll or .so file. The file Hexacrypt-Tester.c is a useful command line utility that is provided for testing, but can be redefined to use a different main function.
+
 
 ## Algorithms Supported
 * **Hexacrypt** - The origional [Hexacrypt](https://github.com/ComprosoftCEO/Hexacrypt/) algorithm as first programmed in Visual Basic. (*see other notes*)
