@@ -48,6 +48,10 @@
 		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hexacrypt-Tester.c">
+			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="Includes/ByteHash-Constants.h" />
 		<Unit filename="Includes/Dll.h" />
 		<Unit filename="Includes/HString.h" />
