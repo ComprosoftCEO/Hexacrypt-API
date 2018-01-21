@@ -36,6 +36,7 @@
 			<Add option="-O3" />
 			<Add option="-Wall" />
 			<Add option="-std=c99" />
+			<Add option="-fPIC" />
 			<Add directory="Includes" />
 		</Compiler>
 		<Unit filename="Algorithms/Hexacrypt.c">
@@ -47,6 +48,7 @@
 		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Includes/ByteHash-Constants.h" />
 		<Unit filename="Includes/Dll.h" />
 		<Unit filename="Includes/HString.h" />
 		<Unit filename="Includes/Hash8.h" />
@@ -54,6 +56,7 @@
 		<Unit filename="Includes/Hexacrypt-API.h" />
 		<Unit filename="Includes/KeyExpand.h" />
 		<Unit filename="Includes/MatrixCode.h" />
+		<Unit filename="Includes/PrimeMap.h" />
 		<Unit filename="Includes/Rand64.h" />
 		<Unit filename="Includes/String-Operations.h" />
 		<Unit filename="Includes/StringMatrix.h" />
@@ -70,6 +73,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Modules/MatrixCode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Modules/PrimeMap.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Modules/Rand64.c">

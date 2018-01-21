@@ -1,3 +1,6 @@
+#ifndef HEXACRYPT_DLL_HEADER
+#define HEXACRYPT_DLL_HEADER
+
 // Used for Windows, when to build a .dll file
 //  Does nothing on Linux
 
@@ -22,3 +25,5 @@
     //This is a Linux OS, so do nothing
     #define DLL_EXPORT
 #endif
+
+#endif // HEXACRYPT_DLL_HEADER Included

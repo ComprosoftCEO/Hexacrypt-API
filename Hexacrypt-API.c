@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
         char* decoded = Hexacrypt_Decrypt(encoded,argv[2]);
         printf("\n********%s\n",decoded); fflush(stdout);
 
-        free(encoded);
-        free(decoded);
+        //free(encoded);
+        //free(decoded);
     }
 }
 

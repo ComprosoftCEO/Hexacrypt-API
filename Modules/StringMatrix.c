@@ -70,7 +70,7 @@ void StringMatrix_Print(pStringMatrix matrix) {
     pStringMatrix_Obj mobj = (pStringMatrix_Obj) matrix;
     uint64_t row, col;
 
-    printf("%llu x %llu\n",mobj->rows,mobj->cols);
+    //printf("%llu x %llu\n",mobj->rows,mobj->cols);
     printf("===============\n");
     for (row = 0; row < mobj->rows; ++row) {
      for (col = 0; col < mobj->cols; ++col) {
