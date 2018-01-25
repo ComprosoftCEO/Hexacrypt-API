@@ -48,6 +48,15 @@
 		<Unit filename="Algorithms/HexacryptPlus.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hashing/Hash8.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Hashing/MathHash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Hashing/PrimeMap.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -71,31 +80,22 @@
 		<Unit filename="Modules/HString.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Modules/Hash8.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/HexStream.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/KeyExpand.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/MathHash.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/MatrixCode.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/PrimeMap.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Modules/Rand64.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="Modules/String-Operations.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Modules/StringMatrix.c">
+		<Unit filename="RNG/Rand64.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Scramblers/MatrixCode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Scramblers/StringMatrix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Streams/HexStream.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Streams/KeyExpand.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
