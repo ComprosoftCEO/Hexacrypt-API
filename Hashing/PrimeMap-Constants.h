@@ -1,5 +1,5 @@
-#ifndef BYTEHASH_CONSTANTS_HEADER
-#define BYTEHASH_CONSTANTS_HEADER
+#ifndef PRIMEMAP_CONSTANTS_HEADER
+#define PRIMEMAP_CONSTANTS_HEADER
 
 #define ROTATE_RIGHT(x,num) (((x) >> (num)) | ((x) << ((sizeof(x)*8)-(num))))
 #define ROTATE_LEFT(x,num) (((x) << (num)) | ((x) >> ((sizeof(x)*8)-(num))))
@@ -532,4 +532,4 @@
 #define PRIME64_254	0xba4815598a0679f4
 #define PRIME64_255	0xbdffe42b38042ad9
 
-#endif // BYTEHASH_CONSTANTS_HEADER Included
+#endif // PRIMEMAP_CONSTANTS_HEADER Included

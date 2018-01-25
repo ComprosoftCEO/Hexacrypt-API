@@ -1,5 +1,5 @@
 #include <PrimeMap.h>
-#include <ByteHash-Constants.h>
+#include <PrimeMap-Constants.h>
 
 #include <Rand64.h>
 #include <Hash8.h>

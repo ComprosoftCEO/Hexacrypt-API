@@ -38,6 +38,11 @@
 			<Add option="-std=c99" />
 			<Add option="-fPIC" />
 			<Add directory="Includes" />
+			<Add directory="Hashing" />
+			<Add directory="Modules" />
+			<Add directory="RNG" />
+			<Add directory="Scramblers" />
+			<Add directory="Streams" />
 		</Compiler>
 		<Unit filename="Algorithms/ByteHash.c">
 			<Option compilerVar="CC" />
@@ -51,12 +56,16 @@
 		<Unit filename="Hashing/Hash8.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hashing/Hash8.h" />
 		<Unit filename="Hashing/MathHash.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hashing/MathHash.h" />
+		<Unit filename="Hashing/PrimeMap-Constants.h" />
 		<Unit filename="Hashing/PrimeMap.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Hashing/PrimeMap.h" />
 		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -64,40 +73,36 @@
 			<Option compilerVar="CC" />
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Includes/ByteHash-Constants.h" />
 		<Unit filename="Includes/Dll.h" />
-		<Unit filename="Includes/HString.h" />
-		<Unit filename="Includes/Hash8.h" />
-		<Unit filename="Includes/HexStream.h" />
 		<Unit filename="Includes/Hexacrypt-API.h" />
-		<Unit filename="Includes/KeyExpand.h" />
-		<Unit filename="Includes/MathHash.h" />
-		<Unit filename="Includes/MatrixCode.h" />
-		<Unit filename="Includes/PrimeMap.h" />
-		<Unit filename="Includes/Rand64.h" />
-		<Unit filename="Includes/String-Operations.h" />
-		<Unit filename="Includes/StringMatrix.h" />
 		<Unit filename="Modules/HString.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Modules/HString.h" />
 		<Unit filename="Modules/String-Operations.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Modules/String-Operations.h" />
 		<Unit filename="RNG/Rand64.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="RNG/Rand64.h" />
 		<Unit filename="Scramblers/MatrixCode.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Scramblers/MatrixCode.h" />
 		<Unit filename="Scramblers/StringMatrix.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Scramblers/StringMatrix.h" />
 		<Unit filename="Streams/HexStream.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Streams/HexStream.h" />
 		<Unit filename="Streams/KeyExpand.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Streams/KeyExpand.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />
