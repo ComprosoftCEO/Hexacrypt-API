@@ -17,7 +17,7 @@ DLL_EXPORT const char* Hexacrypt_Encrypt(const char* plaintext, const char* key)
 
     if (!rand) {rand = New_Rand64_Seed(0);}
 
-    Rand64_Reseed(rand,Hash8_U64(key));
+    Rand64_Reseed(rand,Hash8_U64(NULL,key));
     pseudoXOR(hs_plaintext->str,rand);
 
     Rand64_Reset(rand);
@@ -44,7 +44,7 @@ DLL_EXPORT const char* Hexacrypt_Decrypt(const char* ciphertext, const char* key
 
     if (!rand) {rand = New_Rand64_Seed(0);}
 
-    Rand64_Reseed(rand,Hash8_U64(key));
+    Rand64_Reseed(rand,Hash8_U64(NULL,key));
     pseudoXOR(hs_ciphertext->str,rand);
 
     Rand64_Reset(rand);

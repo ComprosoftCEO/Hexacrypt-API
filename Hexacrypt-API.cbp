@@ -39,6 +39,9 @@
 			<Add option="-fPIC" />
 			<Add directory="Includes" />
 		</Compiler>
+		<Unit filename="Algorithms/ByteHash.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Algorithms/Hexacrypt.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -59,6 +62,7 @@
 		<Unit filename="Includes/HexStream.h" />
 		<Unit filename="Includes/Hexacrypt-API.h" />
 		<Unit filename="Includes/KeyExpand.h" />
+		<Unit filename="Includes/MathHash.h" />
 		<Unit filename="Includes/MatrixCode.h" />
 		<Unit filename="Includes/PrimeMap.h" />
 		<Unit filename="Includes/Rand64.h" />
@@ -74,6 +78,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Modules/KeyExpand.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Modules/MathHash.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Modules/MatrixCode.c">

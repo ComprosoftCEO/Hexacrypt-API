@@ -52,7 +52,7 @@ pPrimeMap New_Prime_Map(const char* key, size_t len) {
 
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) malloc(sizeof(PrimeMap_Obj));
 
-    pmap->rand = New_Rand64_Seed(Hash8_U64_Length(key,len));
+    pmap->rand = New_Rand64_Seed(Hash8_U64_Length(NULL,key,len));
 
     memcpy(pmap->lookup,ALL_PRIMES,sizeof(ALL_PRIMES));
     Shuffle_Prime_Map(pmap);

@@ -214,3 +214,74 @@ void Remove_Garbage(pHString string, pRand64 rand,
     string->str[(len - 2)- back] = 0;
     string->str+=front;
 }
+
+
+
+//Da buffer BETTER BE MODIFIABLE!!!
+void Flip_Bytes(uint8_t* buf, size_t len) {
+    uint8_t temp, *end_buf = buf+len-1;
+    size_t i;
+
+    /*Divide by 2, round down */
+    len>>=1;
+    for (i = 0; i < len; ++i) {
+        temp = *buf;
+        *buf = *end_buf;
+        *end_buf = temp;
+
+        ++buf;
+        --end_buf;
+    }
+}
+
+void Force_Endianess(uint8_t *buf, size_t length, Endian_t e) {
+
+    //What is my endianess???
+    Endian_t sys_e = E_BIG;
+    BYTE_TYPE(uint32_t) tester = {.value = 1};
+    if (tester.byte[0]) {sys_e = E_LITTLE;}
+
+    //Flip Bytes if endians do not match
+    if (e != sys_e) {Flip_Bytes(buf,length);}
+}
+
+
+#define STRING_TO_TEMPLATE(name,type) \
+type String_To_##name(const char* str) { \
+    BYTE_TYPE(type) buf; \
+    \
+    /* strncpy automatically fills rest in with 0's */ \
+    strncpy((char*) buf.byte,str,sizeof(type));  \
+    \
+    Force_Endianess(buf.byte,sizeof(type),E_BIG); \
+    \
+    return buf.value;\
+}
+
+//len = Length of the arr
+#define BYTES_TO_TEMPLATE(name,type) \
+type Bytes_To_##name(const uint8_t* arr, size_t len) { \
+    BYTE_TYPE(type) buf; \
+    size_t i, copy_len = sizeof(type); \
+    \
+    if (len < copy_len) {copy_len = len;} \
+    for (i = 0; i < copy_len; ++i) { /* Copy only size of array */ \
+        buf.byte[i] = arr[i]; \
+    } \
+    \
+    for (; i < sizeof(type); ++i) { /* Fill remaining with 0 */ \
+        buf.byte[i] = 0; \
+    } \
+    \
+    Force_Endianess(buf.byte,sizeof(type), E_BIG); \
+    \
+    return buf.value; \
+}
+
+STRING_TO_TEMPLATE(U16,uint16_t);
+STRING_TO_TEMPLATE(U32,uint32_t);
+STRING_TO_TEMPLATE(U64,uint64_t);
+
+BYTES_TO_TEMPLATE(U16,uint16_t);
+BYTES_TO_TEMPLATE(U32,uint32_t);
+BYTES_TO_TEMPLATE(U64,uint64_t);

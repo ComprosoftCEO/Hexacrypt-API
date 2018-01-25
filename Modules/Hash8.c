@@ -1,8 +1,10 @@
 #include <Hash8.h>
+#include <Rand64.h>
+#include <String-Operations.h>
 #include <string.h>
 
 // 0-255 shuffled in any (random) order suffices
-static const uint8_t hashTable[256] = {
+static const uint8_t defaultHashTable[256] = {
        98,  6, 85,150, 36, 23,112,164,135,207,169,  5, 26, 64,165,219, //  1
        61, 20, 68, 89,130, 63, 52,102, 24,229,132,245, 80,216,195,115, //  2
        90,168,156,203,177,120,  2,190,188,  7,100,185,174,243,162, 10, //  3
@@ -21,13 +23,53 @@ static const uint8_t hashTable[256] = {
        43,119,224, 71,122,142, 42,160,104, 48,247,103, 15, 11,138,239  // 16
 };
 
+typedef struct {
+    uint8_t hashTable[256];
+} Hash8_Obj, *pHash8_Obj;
+
+
+//Pass a Null rand pointer to initialize with default table
+pHash8 New_Hash8(pRand64 rand) {
+    pHash8_Obj hash = malloc(sizeof(Hash8_Obj));
+    Hash8_Reseed((pHash8) hash,rand);
+    return (pHash8) hash;
+}
+
+void Hash8_Reseed(pHash8 h, pRand64 rand) {
+    pHash8_Obj hash = (pHash8_Obj) h;
+    int i;
+
+    if (rand) {
+        for (i = 0; i < 256; ++i) {
+            hash->hashTable[i] = (uint8_t) i;
+        }
+        Shuffle_String(rand,(char *) hash->hashTable,256);
+
+    //Just use the default table
+    } else {
+        for (i = 0; i < 256; ++i) {
+            hash->hashTable[i] = defaultHashTable[i];
+        }
+    }
+}
+
+
+void Free_Hash8(pHash8 hash) {
+    free(hash);
+}
+
+
 //Use preprocessor like a template
 #define HASH8_LENGTH_TEMPLATE(name,type) \
-type Hash8_##name##_Length(const char* str, size_t len) { \
+type Hash8_##name##_Length(pHash8 h, const char* str, size_t len) { \
     \
+    pHash8_Obj hash = (pHash8_Obj) h;\
 	type retVal = 0; \
 	uint8_t hashChar; \
+	const uint8_t *hashTable = defaultHashTable; \
 	size_t i, j; \
+    \
+    if (hash) {hashTable = hash->hashTable;} \
     \
 	for (i = 0; i < sizeof(type); ++i) {\
         hashChar = hashTable[(str[0] + i) % 256];\
@@ -42,11 +84,15 @@ type Hash8_##name##_Length(const char* str, size_t len) { \
 }
 
 #define HASH8_TEMPLATE(name,type) \
-type Hash8_##name(const char* str) { \
+type Hash8_##name(pHash8 h, const char* str) { \
  \
+    pHash8_Obj hash = (pHash8_Obj) h;\
 	type retVal = 0; \
 	uint8_t hashChar; \
+	const uint8_t *hashTable = defaultHashTable; \
 	size_t i, j, len=strlen(str); \
+    \
+    if (hash) {hashTable = hash->hashTable;}\
     \
 	for (i = 0; i < sizeof(type); ++i) {\
         hashChar = hashTable[(str[0] + i) % 256];\

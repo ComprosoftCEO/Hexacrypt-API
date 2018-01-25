@@ -33,7 +33,7 @@ DLL_EXPORT const char* HexacryptPlus_Encrypt(const char* plaintext, const char* 
 
     for (uint32_t i = 0; i < rounds; ++i) {
 
-        Rand64_Reseed(rand,Hash8_U64(ke->str));
+        Rand64_Reseed(rand,Hash8_U64(NULL,ke->str));
         pseudoXOR(hs_plaintext->str,rand);
 
         Rand64_Reset(rand);
@@ -48,7 +48,7 @@ DLL_EXPORT const char* HexacryptPlus_Encrypt(const char* plaintext, const char* 
     }
 
     //One final PseudoXOR
-    Rand64_Reseed(rand,Hash8_U64(ke->str));
+    Rand64_Reseed(rand,Hash8_U64(NULL,ke->str));
     pseudoXOR(hs_plaintext->str,rand);
 
 
@@ -79,14 +79,14 @@ DLL_EXPORT const char* HexacryptPlus_Decrypt(const char* ciphertext, const char*
     //Add No extra garbage space to the string
     pHString hs_ciphertext = New_HString(ciphertext,BUF_SIZE,0,0,0);
 
-    Rand64_Reseed(rand,Hash8_U64(all_keys[rounds]));
+    Rand64_Reseed(rand,Hash8_U64(NULL,all_keys[rounds]));
     pseudoXOR(hs_ciphertext->str,rand);
 
     for (i = rounds; i > 0; --i) {
 
         MatrixCode_Inverse(hs_ciphertext->str,all_keys[i-1],DEFAULT_COMMANDS);
 
-        Rand64_Reseed(rand,Hash8_U64(all_keys[i-1]));
+        Rand64_Reseed(rand,Hash8_U64(NULL,all_keys[i-1]));
         Remove_Garbage(hs_ciphertext,rand,
                     DEFAULT_FGARB_MIN, DEFAULT_FGARB_RANGE,
                     DEFAULT_BGARB_MIN, DEFAULT_BGARB_RANGE);

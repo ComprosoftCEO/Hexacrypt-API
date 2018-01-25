@@ -18,7 +18,7 @@ pKeyExpand New_KeyExpander(const char* str) {
     Filter_Ascii(ke->str,slen);
 
     ke->stream = New_HexStream(ke->str,128);
-    ke->counter = New_Rand64_Seed(Hash8_U64(ke->str));
+    ke->counter = New_Rand64_Seed(Hash8_U64(NULL,ke->str));
 
     return ke;
 }

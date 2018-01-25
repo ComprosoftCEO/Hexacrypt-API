@@ -82,4 +82,70 @@ void Remove_Garbage(pHString string, pRand64 rand,
 #define DEFAULT_BGARB_RANGE 4
 
 
+
+
+/** \brief Reverse <length> bytes inside a buffer
+ *
+ * \param buf The buffer to modify when reversing byte order
+ * \param len The number of bytes to reverse
+ */
+void Flip_Bytes(uint8_t* buf, size_t len);
+
+
+
+typedef enum {
+    E_LITTLE,
+    E_BIG
+} Endian_t;
+
+/** \brief Force N number of bytes in buf to be in a certain endian order.
+ *
+ *  If e == system endianess, then this function does nothing. Otherwise, it
+ *    reverses <length> bits from buf (thus modifying buf)
+ *
+ * \param buf The buffer of uint8 values to modify
+ * \param length Number of bits to modify
+ * \param e Target endianess
+ */
+void Force_Endianess(uint8_t *buf, size_t length, Endian_t e);
+
+//Special union that has both a type and an array
+//  of bytes for that type
+#define BYTE_TYPE(type) \
+union { \
+    type value; \
+    uint8_t byte[sizeof(type)];\
+}
+
+
+/** \brief Convert a string or byte array into a different data type
+ *
+ *   With the String_To_xxx and Bytes_To_xxx functions, the bytes of a char* is converted into
+ *    the respective xxx data type. If a string does not have as many bytes
+ *    as the output data type, the remaining bytes are filled with 0x00.
+ *
+ *   The data type is considered to be in big endian order, but is converted
+ *    based on the target platform
+ *
+ *   ex) "Hello" -> {48 65 6c 6c 6f}
+ *        U16 -> {48 65}                   = 18533
+ *        U32 -> {48 65 6c 6c}             = 1214606444
+ *        U64 -> {48 65 6c 6c 6f 00 00 00} = 5216694956353126400
+ *
+ * \param str The string to convert
+ * \param len Total size of the byte array (BYTES_TO_xxx only)
+ * \return Respective data type
+ */
+#define STRING_TO_FUNCTION(name,type) type String_To_##name(const char* str)
+#define BYTES_TO_FUNCTION(name,type) type Bytes_To_##name(const uint8_t* arr, size_t len)
+
+STRING_TO_FUNCTION(U16,uint16_t);
+STRING_TO_FUNCTION(U32,uint32_t);
+STRING_TO_FUNCTION(U64,uint64_t);
+
+BYTES_TO_FUNCTION(U16,uint16_t);
+BYTES_TO_FUNCTION(U32,uint32_t);
+BYTES_TO_FUNCTION(U64,uint64_t);
+
+
 #endif // STRING_OPERATIONS_HEADER Included

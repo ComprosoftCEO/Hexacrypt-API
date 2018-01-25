@@ -70,7 +70,7 @@ void HexStream_Reseed(pHexStream stream, const char* seed) {
     //Reset the buffers and PRNG
     hs->state = hs->state_buf;
     hs->index = 0;
-    Rand64_Reseed(hs->char_rand,Hash8_U64(seed));
+    Rand64_Reseed(hs->char_rand,Hash8_U64(NULL,seed));
 
     //Fill the state
     size_t i, len = strlen(seed);
@@ -100,7 +100,7 @@ char HexStream_Next(pHexStream stream) {
 
     //pseudoXOR the state using the state as the key
     //  Then get the first character
-    Rand64_Reseed(pxor_rand,Hash8_U64_Length(hs->state,hs->size));
+    Rand64_Reseed(pxor_rand,Hash8_U64_Length(NULL,hs->state,hs->size));
     pseudoXOR_Length(hs->state,hs->size,pxor_rand);
     ret = hs->state[0];
 
