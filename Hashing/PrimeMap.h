@@ -6,7 +6,8 @@
 
 typedef void* pPrimeMap;
 
-pPrimeMap New_Prime_Map(const char* key, size_t len);
+pPrimeMap New_Prime_Map(uint64_t seed);
+void Reseed_Prime_Map(pPrimeMap pm, uint64_t seed);
 void Free_Prime_Map(pPrimeMap pmap);
 
 uint32_t Prime_Map(pPrimeMap pmap, uint32_t input);

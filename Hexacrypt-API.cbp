@@ -69,10 +69,6 @@
 		<Unit filename="Hexacrypt-API.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="Hexacrypt-Tester.c">
-			<Option compilerVar="CC" />
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="Includes/Dll.h" />
 		<Unit filename="Includes/Hexacrypt-API.h" />
 		<Unit filename="Modules/HString.c">
@@ -87,6 +83,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="RNG/Rand64.h" />
+		<Unit filename="Runner.c">
+			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="Scramblers/MatrixCode.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -103,6 +103,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Streams/KeyExpand.h" />
+		<Unit filename="Tester.c">
+			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />

@@ -23,23 +23,7 @@ char output_buffer[BUF_SIZE];
 
 //Compile a main if this is a debug program
 #ifdef DEBUG
-    //#include "Hexacrypt-Tester.c"
+    //#include "Runner.c"
 
-    #include <stdio.h>
-    #include <String-Operations.h>
-    int main(int argc, char** argv) {
-
-        if (argc < 2) {return 0;}
-
-        uint32_t i = Bytes_To_U32(argv[1],3);
-
-        printf("%d\n",i);
-
-
-        //const char* enc = HexacryptPlus_Encrypt("Hello","Key",10);
-        //printf("%s\n",enc);
-        //const char* dec = HexacryptPlus_Decrypt(enc,"Key",10);
-        //printf("%s\n",dec);
-
-    }
+    #include "Tester.c"
 #endif // DEBUG

@@ -48,17 +48,25 @@ static const uint32_t ALL_PRIMES[256] = {
 
 
 
-pPrimeMap New_Prime_Map(const char* key, size_t len) {
+pPrimeMap New_Prime_Map(uint64_t seed) {
 
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) malloc(sizeof(PrimeMap_Obj));
+    pmap->rand = New_Rand64_Seed(seed);
 
-    pmap->rand = New_Rand64_Seed(Hash8_U64_Length(NULL,key,len));
-
-    memcpy(pmap->lookup,ALL_PRIMES,sizeof(ALL_PRIMES));
-    Shuffle_Prime_Map(pmap);
+    Reseed_Prime_Map(pmap,seed);
 
     return (pPrimeMap) pmap;
 }
+
+
+void Reseed_Prime_Map(pPrimeMap pm, uint64_t seed) {
+    pPrimeMap_Obj pmap = (pPrimeMap_Obj) pm;
+
+    Rand64_Reseed(pmap->rand,seed);
+    memcpy(pmap->lookup,ALL_PRIMES,sizeof(ALL_PRIMES));
+    Shuffle_Prime_Map(pmap);
+}
+
 
 
 void Free_Prime_Map(pPrimeMap pm) {
@@ -77,11 +85,13 @@ void Shuffle_Prime_Map(pPrimeMap pm) {
 
     int i;
     for (i = 0; i < 256; ++i) {
-        int index = Rand64_Next(pmap->rand) & 0xFF;
+        int index = Rand64_Next(pmap->rand) % (256 - i);
 
-        uint32_t temp = arr[i];
-        arr[i] = arr[index];
+        uint32_t temp = arr[0];
+        arr[0] = arr[index];
         arr[index] = temp;
+
+        ++arr;
     }
 }
 
@@ -97,7 +107,7 @@ uint32_t Prime_Map(pPrimeMap pm, uint32_t input) {
         uint8_t byte = input & 0xFF;
         input >>= 8;
 
-        input ^= ROTATE_LEFT(pmap->lookup[byte],i*8);
+        result ^= ROTATE_LEFT(pmap->lookup[byte],i*8);
     }
 
     return result;
