@@ -19,11 +19,3 @@
 
 //Buffer used by all encryption and decryption
 char output_buffer[BUF_SIZE];
-
-
-//Compile a main if this is a debug program
-#ifdef DEBUG
-    //#include "Runner.c"
-
-    #include "Tester.c"
-#endif // DEBUG

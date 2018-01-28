@@ -12,13 +12,16 @@ When compiling for Windows, you might need to define the constant *\_WIN32*. In 
 ## Cross-Platform Support
 This shared library is designed to work on any platform. The file Dll.h defines the various constants needed to compile the .dll on Windows or the .so file on Mac/Linux. The file Hexacrypt-API.c also contains the DllMain function needed by Windows DLL files.
 
-## Debug vs Release
-Hexacrypt-API defines 2 versions when compiling:
+## Targets
+Hexacrypt-API defines 3 targets to use when compiling:
 
 * **Debug** - Compile an executible to test the code (located in bin/Debug)
+* **Executable** - Compile a command-line utility to run the various Hexacrypt algorithms from the command line (located in bin/Executable)
 * **Release** - Compile the .dll or .so file (located in bin/Release)
 
-The main function is defined in Hexacrypt-API.c, and helps to debug the code without having to use an external program to test the .dll or .so file. The file Hexacrypt-Tester.c is a useful command line utility that is provided for testing, but can be redefined to use a different main function.
+For the Debug target, Tester.c holds the main function used to compile the code. This target should be used for quickly testing new features in the code.
+
+For the Executable target, Runner.c holds the code to the command line utility (and the main function). This code is designed to test the Hexacrypt library functions as a whole and not individual features. This code is written to be modular and expandable as more Hexacrypt functions in the future.
 
 
 ## Algorithms Supported
