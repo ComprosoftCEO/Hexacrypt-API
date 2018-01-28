@@ -9,9 +9,11 @@
 
 typedef const char* (*HAction_Fun_t)(int,char**);
 typedef struct {
-    char* arg;          //Command line argument (-e, -d, -E, -D, etc...)
+    const char* arg;          //Command line argument (-e, -d, -E, -D, etc...)
+    const char* params;       //What are the parameters needed
+    const char* description;  //What does this command line do
     HAction_Fun_t fun;  //Function to run with this argument
-} HAction_t;
+} HAction_t, *pHAction_t;
 
 const char* do_hexacrypt_encrypt(int argc, char** argv);
 const char* do_hexacrypt_decrypt(int argc, char** argv);
@@ -19,10 +21,10 @@ const char* do_hexacrypt_plus_encrypt(int argc, char** argv);
 const char* do_hexacrypt_plus_decrypt(int argc, char** argv);
 
 static const HAction_t ALL_ACTIONS[] = {
-    {"-e",do_hexacrypt_encrypt},
-    {"-d",do_hexacrypt_decrypt},
-    {"-E",do_hexacrypt_plus_encrypt},
-    {"-D",do_hexacrypt_plus_decrypt}
+    {"-e",  "<msg> <key>",     "Encrypt with Hexacrypt",   do_hexacrypt_encrypt},
+    {"-d",  "<msg> <key>",     "Decrypt with Hexacrypt",   do_hexacrypt_decrypt},
+    {"-E",  "<msg> <key> [r]", "Encrypt with Hexacrypt Plus ([r] rounds, default=10)", do_hexacrypt_plus_encrypt},
+    {"-D",  "<msg> <key> [r]", "Decrypt with Hexacrypt Plus ([r] rounds, default=10)", do_hexacrypt_plus_decrypt}
 };
 
 
@@ -30,12 +32,12 @@ static const HAction_t ALL_ACTIONS[] = {
 static void show_help(const char* appname) {
     printf("Usage: %s (ALGORITHM) (OPTIONS)\n\n",appname);
 
+    size_t i;
     printf("Algorithms:\n");
-    printf("\t-e <msg> <key> = Encrypt with Hexacrypt\n");
-    printf("\t-d <msg> <key> = Decrypt with Hexacrypt\n");
-    printf("\t-E <msg> <key> [r] = Encrypt with Hexacrypt Plus ([r] rounds)\n");
-    printf("\t-D <msg> <key> [r] = Decrypt  with Hexacrypt Plus ([r] rounds)\n");
-    printf("\nNote: The default number of rounds [r] for -E and -D is 10\n");
+    for (i = 0; i < (sizeof(ALL_ACTIONS) / sizeof(ALL_ACTIONS[i])); ++i) {
+        const HAction_t* hact = ALL_ACTIONS+i;
+        printf("\t%s %s = %s\n",hact->arg, hact->params, hact->description);
+    }
 }
 
 
@@ -46,7 +48,7 @@ int main(int argc, char** argv) {
 
     //Show Help
     if (argc < 2 || !strcmp(argv[1],"--help")) {
-        show_help(argv[0]);
+        show_help("Hexacrypt-API");
         return 0;
     }
 
