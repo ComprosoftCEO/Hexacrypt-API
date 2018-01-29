@@ -5,6 +5,8 @@
 
 int main(int argc, char** argv) {
 
+    printf("%llu\n",Rand64_Next(NULL));
+
     pPrimeMap pmap = New_Prime_Map(1);
     uint64_t result, temp;
     for (result = 0; result < ((uint64_t) 1 << 32); ++result) {

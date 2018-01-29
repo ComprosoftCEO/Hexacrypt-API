@@ -9,6 +9,8 @@ typedef struct {
 	uint64_t index;					// Current location inside the state
 } Rand64_Obj, *pRand64_Obj;
 
+static pRand64_Obj internal_rand = NULL;
+
 
 
 pRand64 New_Rand64() {
@@ -29,11 +31,12 @@ pRand64 New_Rand64_Seed(uint64_t seed) {
 
 
 void Free_Rand64(pRand64 rand) {
-    free(rand);
+    if (rand) {free(rand);}
 }
 
 
 void Rand64_Reseed(pRand64 rand, uint64_t seed) {
+    if (!rand) {return;}
 
 	pRand64_Obj rand64 = (pRand64_Obj) rand;
 	rand64->seed = seed;
@@ -65,12 +68,14 @@ void Rand64_RandomSeed(pRand64 rand) {
 
 
 uint64_t Rand64_GetSeed(pRand64 rand) {
+    if (!rand) {return -1;}
 	return ((pRand64_Obj) rand)->seed;
 }
 
 
 void Rand64_Reset(pRand64 rand) {
 	pRand64_Obj rand64 = (pRand64_Obj) rand;
+    if (!rand) {return;}
 
 	//Copy from the backup array for quick reset
 	for (int i = 0; i < R64_STATE; ++i) {
@@ -85,6 +90,10 @@ void Rand64_Reset(pRand64 rand) {
 
 uint64_t Rand64_Next(pRand64 rand) {
 	pRand64_Obj r64 = (pRand64_Obj) rand;
+    if (!rand) {
+        if (!internal_rand) {internal_rand = New_Rand64();}
+        r64 = internal_rand;
+    }
 
 	uint64_t index = r64->index=(r64->index+1) & R64_MASK;
 	r64->arr[index] += (r64->arr[(index + 5) & R64_MASK] + r64->arr[(index + 17) & R64_MASK]);
