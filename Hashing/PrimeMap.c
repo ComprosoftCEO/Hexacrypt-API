@@ -60,6 +60,7 @@ pPrimeMap New_Prime_Map(uint64_t seed) {
 
 
 void Reseed_Prime_Map(pPrimeMap pm, uint64_t seed) {
+    if (!pm) {return;}
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) pm;
 
     Rand64_Reseed(pmap->rand,seed);
@@ -70,6 +71,7 @@ void Reseed_Prime_Map(pPrimeMap pm, uint64_t seed) {
 
 
 void Free_Prime_Map(pPrimeMap pm) {
+    if (!pm) {return;}
 
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) pm;
     Free_Rand64(pmap->rand);
@@ -79,6 +81,8 @@ void Free_Prime_Map(pPrimeMap pm) {
 
 
 void Shuffle_Prime_Map(pPrimeMap pm) {
+
+    if (!pm) {return;}
 
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) pm;
     uint32_t* arr = pmap->lookup;
@@ -101,13 +105,16 @@ uint32_t Prime_Map(pPrimeMap pm, uint32_t input) {
 
     pPrimeMap_Obj pmap = (pPrimeMap_Obj) pm;
     uint32_t result = input;
+    const uint32_t *lookup = ALL_PRIMES;
+
+    if (pm) {lookup = pmap->lookup;}
 
     int i;
     for (i = 0; i < sizeof(input); ++i) {
         uint8_t byte = input & 0xFF;
         input >>= 8;
 
-        result ^= ROTATE_LEFT(pmap->lookup[byte],i*8);
+        result ^= ROTATE_LEFT(lookup[byte],i*8);
     }
 
     return result;
