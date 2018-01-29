@@ -36,6 +36,8 @@ pHash8 New_Hash8(pRand64 rand) {
 }
 
 void Hash8_Reseed(pHash8 h, pRand64 rand) {
+    if (!h) {return;}
+
     pHash8_Obj hash = (pHash8_Obj) h;
     int i;
 
@@ -55,6 +57,7 @@ void Hash8_Reseed(pHash8 h, pRand64 rand) {
 
 
 void Free_Hash8(pHash8 hash) {
+    if (!hash) {return;}
     free(hash);
 }
 
