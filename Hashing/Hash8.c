@@ -1,6 +1,5 @@
 #include <Hash8.h>
 #include <Rand64.h>
-#include <String-Operations.h>
 #include <string.h>
 
 // 0-255 shuffled in any (random) order suffices
@@ -28,6 +27,25 @@ typedef struct {
 } Hash8_Obj, *pHash8_Obj;
 
 
+
+//Shuffle an array of bytes of a given length
+static void Shuffle_Bytes(pRand64 rand, uint8_t* data, size_t len) {
+	char temp;
+
+	size_t i;
+	for (i = 0; i < len; ++i) {
+
+		//Do some fancy pointer maths to make this swapping very quick
+		uint64_t index = Rand64_Next(rand) % (len - i);
+
+		temp = *data;
+		*data = data[index];
+		data[index] = temp;
+
+		++data;
+	}
+}
+
 //Pass a Null rand pointer to initialize with default table
 pHash8 New_Hash8(pRand64 rand) {
     pHash8_Obj hash = malloc(sizeof(Hash8_Obj));
@@ -45,7 +63,7 @@ void Hash8_Reseed(pHash8 h, pRand64 rand) {
         for (i = 0; i < 256; ++i) {
             hash->hashTable[i] = (uint8_t) i;
         }
-        Shuffle_String(rand,(char *) hash->hashTable,256);
+        Shuffle_Bytes(rand,(uint8_t *) hash->hashTable,256);
 
     //Just use the default table
     } else {
@@ -54,6 +72,7 @@ void Hash8_Reseed(pHash8 h, pRand64 rand) {
         }
     }
 }
+
 
 
 void Free_Hash8(pHash8 hash) {
@@ -77,7 +96,8 @@ type Hash8_##name##_Length(pHash8 h, const char* str, size_t len) { \
 	for (i = 0; i < sizeof(type); ++i) {\
         hashChar = hashTable[(str[0] + i) % 256];\
         for (j = 0; j < len; ++j) {\
-            hashChar = hashTable[hashChar ^ str[j]];\
+            hashChar ^= str[j]; \
+            hashChar = hashTable[hashChar]; \
         }\
         retVal <<= 8;\
         retVal |= hashChar;\
@@ -100,7 +120,8 @@ type Hash8_##name(pHash8 h, const char* str) { \
 	for (i = 0; i < sizeof(type); ++i) {\
         hashChar = hashTable[(str[0] + i) % 256];\
         for (j = 0; j < len; ++j) {\
-            hashChar = hashTable[hashChar ^ str[j]];\
+            hashChar ^= str[j]; \
+            hashChar = hashTable[hashChar];\
         }\
         retVal <<= 8;\
         retVal |= hashChar;\
